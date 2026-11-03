@@ -1,0 +1,75 @@
+import { Colors } from '@/components/tokens';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { Stack, router } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { auth } from '../api/auth';
+
+export default function RootLayout() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const user = await auth.getUser();
+      
+      if (!user) {
+  
+        router.replace('/register');
+      }
+      
+      setLoading(false);
+    };
+
+    checkAuth();
+  }, []);
+
+  if (loading) {
+    return null;   
+  }
+
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+    <BottomSheetModalProvider>
+    <Stack>
+      <Stack.Screen 
+      name="index" 
+      options={{ 
+        title: 'FishHoz',
+        headerStyle: {
+          backgroundColor: Colors.DarkGreenBack,
+        },
+        headerTintColor: Colors.salatText,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }} 
+      />
+      <Stack.Screen name="login" options={{ title: 'Вход', headerShown: false }} />
+      <Stack.Screen name="register" options={{ title: 'Регистрация', headerShown: false }} />
+      <Stack.Screen name="ponds/add" 
+      options={{ title: 'Создание пруда',
+      headerStyle: {
+          backgroundColor: Colors.DarkGreenBack,
+        },
+        headerTintColor: Colors.salatText,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        }, 
+      }} 
+      />
+      <Stack.Screen name="ponds/[id]" 
+      options={{ title: 'Пруд',
+      headerStyle: {
+          backgroundColor: Colors.DarkGreenBack,
+        },
+        headerTintColor: Colors.salatText,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        }, 
+      }} 
+      />
+    </Stack>
+    </BottomSheetModalProvider>
+    </GestureHandlerRootView>
+  );
+}
