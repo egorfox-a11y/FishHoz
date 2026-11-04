@@ -54,7 +54,9 @@ export const catches = pgTable('catches', {
   pondId: bigint('pond_id', { mode: 'number' })
     .references(() => ponds.id, { onDelete: 'cascade' })
     .notNull(),
-  species: text('species').notNull(),
+  speciesId: bigint('species_id', { mode: 'number' })
+    .references(() => fishSpecies.id, { onDelete: 'set null' })
+    .notNull(),
   quantity: integer('quantity').notNull(),
   totalWeight: numeric('total_weight', { mode: 'number' }),
   purpose: text('purpose'),
