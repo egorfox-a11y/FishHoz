@@ -5,6 +5,7 @@ import Fastify from 'fastify';
 import { feedingRoutes } from './routes/feedings.ts';
 import { fishBatchRoutes } from './routes/fishBatches.ts';
 import { pondRoutes } from './routes/ponds.ts';
+import { catchesRoutes } from './routes/catches.ts';
 
 const fastify = Fastify({ logger: true });
 
@@ -35,6 +36,8 @@ fastify.register(pondRoutes, { prefix: '/api/v1' });
 fastify.register(fishBatchRoutes, { prefix: '/api/v1' });
 
 fastify.register(feedingRoutes, { prefix: '/api/v1' });
+
+fastify.register(catchesRoutes, { prefix: '/api/v1' });
 
 fastify.get('/health', async () => {
   return { status: 'ok', timestamp: new Date().toISOString() };

@@ -44,7 +44,7 @@ export type Feeding = {
 export type Catch = {
   id: number;
   pondId: number;
-  species: string;
+  speciesId: number;
   quantity: number;
   totalWeight: number | null;
   purpose: string | null;
@@ -94,7 +94,7 @@ export type CreateFeedingDTO = {
 
 export type CreateCatchDTO = {
   pondId: number;
-  species: string;
+  speciesId: number;
   quantity: number;
   totalWeight?: number;
   purpose?: string;

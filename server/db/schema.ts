@@ -55,12 +55,11 @@ export const catches = pgTable('catches', {
     .references(() => ponds.id, { onDelete: 'cascade' })
     .notNull(),
   speciesId: bigint('species_id', { mode: 'number' })
-    .references(() => fishSpecies.id, { onDelete: 'set null' })
-    .notNull(),
+    .references(() => fishSpecies.id, { onDelete: 'set null' }),
   quantity: integer('quantity').notNull(),
   totalWeight: numeric('total_weight', { mode: 'number' }),
   purpose: text('purpose'),
-  caughtAt: timestamp('caught_at').defaultNow().notNull(),
+  caughtAt: timestamp('caught_at', { mode: 'string' }).defaultNow().notNull(),
 });
 
 export const transactions = pgTable('transactions', {
