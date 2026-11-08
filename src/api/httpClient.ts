@@ -3,12 +3,13 @@ import { API_URL } from "./apiClient";
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${API_URL}${endpoint}`;
 
-    const headers = {
-        'Content-Type': 'applicatio/json',
-        ...options.headers,
-    };
+    const headers: Record<string, string> = { ...options.headers as any };
+    
+    if (options.body) {
+      headers['Content-Type'] = 'application/json';
+    }
 
-    const response = await fetch(url, {...options, headers});
+    const response = await fetch(url, { ...options, headers });
 
     if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));

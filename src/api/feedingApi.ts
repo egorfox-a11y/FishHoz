@@ -13,4 +13,9 @@ export const feedingApi = {
     httpClient.patch<Feeding>(`/feedings/${id}`, data),
     
   delete: (id: number) => httpClient.delete<void>(`/feedings/${id}`),
+
+  getByPondId: async (pondId: number) => {
+      const allCatches = await httpClient.get<Feeding[]>('/feedings');
+      return allCatches.filter(c => c.pondId === pondId);
+    },
 };

@@ -16,6 +16,7 @@ export async function fishBatchRoutes(fastify: FastifyInstance) {
                         id: { type: 'number' },
                         pondId: { type: 'number' },
                         speciesId: { type: 'number', nullable: true },
+                        speciesName: { type: 'string', nullable: true },
                         quantity: { type: 'number' },
                         avgWeight: { type: 'number', nullable: true },
                         launchDate: { type: 'string' }
@@ -73,7 +74,7 @@ export async function fishBatchRoutes(fastify: FastifyInstance) {
         }
     });
 
-    fastify.patch('/fish-batches:id', {
+    fastify.patch('/fish-batches/:id', {
         schema: {
             tags: ['Fish Batches'],
             description: 'Обновить данные партии рыбы',
@@ -103,7 +104,7 @@ export async function fishBatchRoutes(fastify: FastifyInstance) {
         }
     });
 
-    fastify.delete('/fish-batches:id', {
+    fastify.delete('/fish-batches/:id', {
         schema:{
             tags: ['Fish Batches'],
             description: 'Удалить партию рыбы',

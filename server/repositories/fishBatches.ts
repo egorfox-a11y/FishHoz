@@ -1,16 +1,43 @@
 import { eq } from 'drizzle-orm';
 import type { CreateFishBatchDTO, FishBatch, UpdateFishBatchDTO } from '../../shared/types.ts';
 import { db } from '../db/index.ts';
-import { fishBatches } from '../db/schema.ts';
+import { fishBatches, fishSpecies } from '../db/schema.ts';
+
 export const fishBatchRepository = {
 
     async getById(id: number): Promise<FishBatch | undefined> {
-        const result = await db.select().from(fishBatches).where(eq(fishBatches.id, id));
-        return result[0];
+        const result = await db.select({
+            id: fishBatches.id,
+            pondId: fishBatches.pondId,
+            speciesId: fishBatches.speciesId,
+            quantity: fishBatches.quantity,
+            avgWeight: fishBatches.avgWeight,
+            launchDate: fishBatches.launchDate,
+            speciesName: fishSpecies.name, // <-- Добавили имя
+        })
+        .from(fishBatches)
+        .leftJoin(fishSpecies, eq(fishBatches.speciesId, fishSpecies.id))
+        .where(eq(fishBatches.id, id));
+        
+        return result[0] as FishBatch | undefined;
     },
+
     async getAll(): Promise<FishBatch[]> {
-        return await db.select().from(fishBatches);
+        const result = await db.select({
+            id: fishBatches.id,
+            pondId: fishBatches.pondId,
+            speciesId: fishBatches.speciesId,
+            quantity: fishBatches.quantity,
+            avgWeight: fishBatches.avgWeight,
+            launchDate: fishBatches.launchDate,
+            speciesName: fishSpecies.name, 
+        })
+        .from(fishBatches)
+        .leftJoin(fishSpecies, eq(fishBatches.speciesId, fishSpecies.id));
+        
+        return result as FishBatch[];
     },
+
     async create(data: CreateFishBatchDTO): Promise<FishBatch> {
         const result = await db.insert(fishBatches).values(data).returning();
         return result[0]!;
@@ -25,6 +52,6 @@ export const fishBatchRepository = {
     },
 
     async delete(id: number): Promise<void> {
-        const result = await db.delete(fishBatches).where(eq(fishBatches.id, id)).returning();
+        await db.delete(fishBatches).where(eq(fishBatches.id, id)).returning();
     }
 };

@@ -2,7 +2,8 @@ export const Colors = {
     DarkGreenBack: '#09110a',
     GreenInput: '#1b301d',
     GreenPlaceHolder: '#6c916f',
-    salatText: '#ace6b0'
+    salatText: '#ace6b0',
+    Red: '#f14747'
 }
 export const Gaps = {
     g10: 10,

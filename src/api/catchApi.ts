@@ -13,4 +13,9 @@ export const catchApi = {
     httpClient.patch<Catch>(`/catches/${id}`, data),
     
   delete: (id: number) => httpClient.delete<void>(`/catches/${id}`),
+
+    getByPondId: async (pondId: number) => {
+    const allCatches = await httpClient.get<Catch[]>('/catches');
+    return allCatches.filter(c => c.pondId === pondId);
+  },
 };
