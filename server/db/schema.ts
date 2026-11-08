@@ -3,10 +3,14 @@ import {
   date,
   integer,
   numeric,
+  pgEnum,
   pgTable,
   text,
-  timestamp,
+  timestamp
 } from 'drizzle-orm/pg-core';
+
+export const transactionTypeEnum = pgEnum('transaction_type', ['income', 'expense']);
+
 
 export const fishSpecies = pgTable('fish_species', {
     id: bigint('id', {mode: 'number'}).primaryKey().generatedAlwaysAsIdentity(),
@@ -66,7 +70,7 @@ export const transactions = pgTable('transactions', {
   id: bigint('id', { mode: 'number' }).primaryKey().generatedAlwaysAsIdentity(),
   catchId: bigint('catch_id', { mode: 'number' })
     .references(() => catches.id, { onDelete: 'set null' }),
-  type: text('type').notNull(),
+  type: transactionTypeEnum('type').notNull(),
   category: text('category').notNull(),
   amount: numeric('amount', { mode: 'number' }).notNull(),
   transactionDate: date('transaction_date').notNull(),
@@ -79,5 +83,5 @@ export const reports = pgTable('reports', {
     .references(() => ponds.id, { onDelete: 'set null' }),
   period: text('period').notNull(),
   type: text('type').notNull(),
-  createdAt: timestamp('created_at').defaultNow(),
+  createdAt: timestamp('created_at', { mode: 'string' }).defaultNow(),
 });

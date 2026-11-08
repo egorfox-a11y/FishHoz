@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
+import type { CreateFeedingDTO, UpdateFeedingDTO } from "../../shared/types.ts";
 import { feedingService } from "../services/feedingService.ts";
-import type { CreateFeedingDTO, UpdateFeedingDTO } from "../types.ts";
 
 export async function feedingRoutes(fastify: FastifyInstance) {
     fastify.get('/feedings', {
@@ -108,7 +108,7 @@ export async function feedingRoutes(fastify: FastifyInstance) {
         const { id } = request.params as { id: number };
         try {
             await feedingService.deleteFeeding(id);
-            return reply.code(204).send(); // 204 No Content
+            return reply.code(204).send(); 
         } catch (error: any) {
             if (error.message === 'Запись о кормлении не найдена') {
                 return reply.code(404).send({ error: error.message });

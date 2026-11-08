@@ -1,11 +1,10 @@
+import { pondApi } from '@/api/pondApi';
 import { Button } from '@/components/Button/button';
 import { Colors, Gaps, Radius } from '@/components/tokens';
 import { router, useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
-import { pondService } from '../services/pondService';
-import type { Pond } from '../types/types';
-
+import type { Pond } from '../../server/types';
 
 export default function HomeScreen() {
   const [ponds, setPonds] = useState<Pond[]>([]);
@@ -15,7 +14,7 @@ export default function HomeScreen() {
   const loadPonds = async () => {
     try {
       setError(null);
-      const data = await pondService.getAllPonds();
+      const data = await pondApi.getAll();
       setPonds(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ошибка загрузки');

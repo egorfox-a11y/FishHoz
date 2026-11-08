@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
+import type { CreatePondDTO, Pond, UpdatePondDTO } from '../../shared/types.ts';
 import { db } from '../db/index.ts';
 import { ponds } from '../db/schema.ts';
-import type { CreatePondDTO, Pond, UpdatePondDTO } from '../types.ts';
 export const pondRepository = {
 
     async getById(id: number): Promise<Pond | undefined> {

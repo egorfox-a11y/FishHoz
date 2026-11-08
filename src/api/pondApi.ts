@@ -1,9 +1,15 @@
-const API_URL = 'http://localhost:3000/api/v1';
+import { CreatePondDTO, Pond } from '../../shared/types';
+import { httpClient } from './httpClient';
 
-export async function fetchPonds() {
-  const response = await fetch(`${API_URL}/ponds`);
-  if (!response.ok) {
-    throw new Error(`Ошибка HTTP: ${response.status}`);
-  }
-  return response.json();
-}
+export const pondApi = {
+  getAll: () => httpClient.get<Pond[]>('/ponds'),
+
+  getById: (id: number) => httpClient.get<Pond>(`/ponds/${id}`),
+
+  create: (data: CreatePondDTO) => httpClient.post<Pond>('/ponds', data),
+
+  update: (id: number, data: { name?: string; area?: number; depth?: number }) => 
+    httpClient.patch<Pond>(`/ponds/${id}`, data),
+    
+  delete: (id: number) => httpClient.delete<void>(`/ponds/${id}`),
+};

@@ -1,5 +1,5 @@
+import type { CreatePondDTO, UpdatePondDTO } from "../../shared/types.ts";
 import { pondRepository } from "../repositories/ponds.ts";
-import type { CreatePondDTO, UpdatePondDTO } from "../types.ts";
 
 export const pondService = {
     async getAllPonds() {

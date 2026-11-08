@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
+import type { CreateFeedingDTO, Feeding, UpdateFeedingDTO } from '../../shared/types.ts';
 import { db } from '../db/index.ts';
 import { feedings } from '../db/schema.ts';
-import type { CreateFeedingDTO, Feeding, UpdateFeedingDTO } from '../types.ts';
 export const feedingRepository = {
 
     async getById(id: number): Promise<Feeding | undefined> {

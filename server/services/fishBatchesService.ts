@@ -1,5 +1,5 @@
+import type { CreateFishBatchDTO, UpdateFishBatchDTO } from "../../shared/types.ts";
 import { fishBatchRepository } from "../repositories/fishBatches.ts";
-import type { CreateFishBatchDTO, UpdateFishBatchDTO } from "../types.ts";
 
 export const fishBatchService = {
     async getAllBatches() {

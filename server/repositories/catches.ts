@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
+import type { Catch, CreateCatchDTO, UpdateCatchDTO } from '../../shared/types.ts';
 import { db } from '../db/index.ts';
 import { catches } from '../db/schema.ts';
-import type { CreateCatchDTO, Catch, UpdateCatchDTO } from '../types.ts';
 export const catchRepository = {
 
     async getById(id: number): Promise<Catch | undefined> {

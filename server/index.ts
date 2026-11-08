@@ -2,10 +2,13 @@ import cors from '@fastify/cors';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import Fastify from 'fastify';
+import { catchesRoutes } from './routes/catches.ts';
 import { feedingRoutes } from './routes/feedings.ts';
 import { fishBatchRoutes } from './routes/fishBatches.ts';
 import { pondRoutes } from './routes/ponds.ts';
-import { catchesRoutes } from './routes/catches.ts';
+import { reportsRoutes } from './routes/reports.ts';
+import { speciesRoutes } from './routes/species.ts';
+import { transactionRoutes } from './routes/transactions.ts';
 
 const fastify = Fastify({ logger: true });
 
@@ -38,6 +41,13 @@ fastify.register(fishBatchRoutes, { prefix: '/api/v1' });
 fastify.register(feedingRoutes, { prefix: '/api/v1' });
 
 fastify.register(catchesRoutes, { prefix: '/api/v1' });
+
+fastify.register(transactionRoutes, { prefix: '/api/v1' });
+
+fastify.register(speciesRoutes, { prefix: '/api/v1' });
+
+fastify.register(reportsRoutes, { prefix: '/api/v1' });
+
 
 fastify.get('/health', async () => {
   return { status: 'ok', timestamp: new Date().toISOString() };

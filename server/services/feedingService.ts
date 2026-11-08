@@ -1,5 +1,5 @@
+import type { CreateFeedingDTO, UpdateFeedingDTO } from "../../shared/types.ts";
 import { feedingRepository } from "../repositories/feedings.ts";
-import type { CreateFeedingDTO, UpdateFeedingDTO } from "../types.ts";
 
 export const feedingService = {
     async getAllFeedings() {

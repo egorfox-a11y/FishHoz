@@ -1,10 +1,10 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
+import { pondApi } from '../../api/pondApi';
 import { Button } from '../../components/Button/button';
 import { Input } from '../../components/input/input';
 import { Colors, Gaps } from '../../components/tokens';
-import { pondService } from '../../services/pondService';
 
 export default function AddPondScreen() {
     const [name, setName] = useState('');
@@ -35,7 +35,7 @@ export default function AddPondScreen() {
         setLoading(true);
         
         try {
-            await pondService.createPond({
+            await pondApi.create({
                 name: name.trim(),
                 area: areaNum,
                 depth: depthNum,

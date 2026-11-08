@@ -1,0 +1,168 @@
+import BottomSheet, { BottomSheetBackdrop, BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { forwardRef, useCallback, useEffect, useState } from 'react';
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { fishService } from '../services/fishService';
+import type { FishSpecies } from '../types/types';
+import { Button } from './Button/button';
+import { Input } from './input/input';
+import { Colors } from './tokens';
+
+type Props = {
+  pondId: number;
+  onClose: () => void;
+  onSuccess: () => void; 
+};
+
+
+export const AddFishSheet = forwardRef<BottomSheet, Props>(
+  ({ pondId, onClose, onSuccess }, ref) => {
+
+    const [speciesList, setSpeciesList] = useState<FishSpecies[]>([]);
+    const [selectedSpeciesId, setSelectedSpeciesId] = useState<number | null>(null);
+    const [quantity, setQuantity] = useState('');
+    const [weight, setWeight] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+    fishService.getAllSpecies()
+      .then(setSpeciesList)
+      .catch((err) => {
+        console.error('Ошибка загрузки видов:', err);
+        Alert.alert('Ошибка', 'Не удалось загрузить список видов рыб');
+      });
+  }, []);
+
+
+    const snapPoints = ['100%'];
+
+    const renderBackdrop = useCallback(
+      (props: any) => (
+        <BottomSheetBackdrop
+          {...props}
+          disappearsOnIndex={-1}
+          appearsOnIndex={0}
+          onPress={onClose}
+        />
+      ),
+      [onClose]
+    );
+
+    const handleSave = async () => {
+      if (!selectedSpeciesId || !quantity) {
+        Alert.alert('Ошибка', 'Заполните вид рыбы и количество');
+        return;
+      }
+
+      setLoading(true);
+      try {
+         await fishService.createFishBatch({
+        pondId,
+        speciesId: selectedSpeciesId,
+        quantity: Number(quantity),
+        avgWeight: weight ? Number(weight) : undefined,
+        launchDate: new Date().toISOString(),
+        });
+        
+        Alert.alert('Успех', 'Рыба добавлена!');
+
+        setSelectedSpeciesId(null);
+        setQuantity('');
+        setWeight('');
+        onSuccess(); 
+        onClose();   
+      } catch (err) {
+        Alert.alert('Ошибка', err instanceof Error ? err.message : 'Что-то пошло не так');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    return (
+      <BottomSheet
+        ref={ref}
+        index={-1} 
+        snapPoints={snapPoints}
+        enablePanDownToClose 
+        backdropComponent={renderBackdrop}
+        backgroundStyle={{ backgroundColor: Colors.DarkGreenBack }}
+        handleIndicatorStyle={{ backgroundColor: Colors.GreenPlaceHolder }}
+      >
+
+        <BottomSheetScrollView contentContainerStyle={styles.content}>
+          <Text style={styles.title}>Добавить рыбу</Text>
+
+          <Text style={styles.label}>Выберите вид рыбы:</Text>
+          <View style={styles.speciesList}>
+              {speciesList.map((item) => (
+                <Pressable
+                  key={item.id}
+                  style={[
+                    styles.speciesItem,
+                    selectedSpeciesId === item.id && styles.speciesItemSelected,
+                  ]}
+                  onPress={() => setSelectedSpeciesId(item.id)}  
+                  >
+                    <Text style={styles.speciesText}>{item.name}</Text>
+                  </Pressable>
+                ))}
+              </View>
+          <Input
+            placeholder="Количество (шт.)"
+            value={quantity}
+            onChangeText={setQuantity}
+            keyboardType="numeric"
+          />
+          <Input
+            placeholder="Средний вес (кг)"
+            value={weight}
+            onChangeText={setWeight}
+            keyboardType="numeric"
+          />
+
+          <Button
+            text={loading ? 'Сохранение...' : 'Сохранить'}
+            onPress={handleSave}
+            disabled={loading}
+          />
+        </BottomSheetScrollView>
+      </BottomSheet>
+    );
+  }
+);
+
+const styles = StyleSheet.create({
+  content: {
+    padding: 20,
+    gap: 15,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: Colors.salatText,
+    marginBottom: 10,
+  },
+  label: {
+  color: Colors.salatText,
+  fontSize: 16,
+  marginBottom: 5,
+  },
+  speciesList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    marginBottom: 15,
+  },
+  speciesItem: {
+    padding: 10,
+    borderRadius: 8,
+    backgroundColor: Colors.GreenInput,
+    borderWidth: 1,
+    borderColor: 'transparent',
+  },
+  speciesItemSelected: {
+    borderColor: Colors.salatText,
+  },
+  speciesText: {
+    color: Colors.salatText,
+  },
+});

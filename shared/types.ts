@@ -44,7 +44,7 @@ export type Feeding = {
 export type Catch = {
   id: number;
   pondId: number;
-  speciesId: number;
+  speciesId: number | null;
   quantity: number;
   totalWeight: number | null;
   purpose: string | null;
@@ -85,6 +85,16 @@ export type CreateFishBatchDTO = {
   ownerId?: string;
 };
 
+export type CreateSpeciesDTO = {
+  name: string;
+  description?: string;
+  optimalTempMin?: number;
+  optimalTempMax?: number;
+  feedRate?: number;
+  growthRate?: number;
+  maturityMonths?: number;
+};
+
 export type CreateFeedingDTO = {
   pondId: number;
   amount: number;
@@ -121,6 +131,7 @@ export type CreateReportDTO = {
 export type UpdatePondDTO = Partial<CreatePondDTO>;
 export type UpdateFishBatchDTO = Partial<CreateFishBatchDTO>;
 export type UpdateFeedingDTO = Partial<CreateFeedingDTO>;
+export type UpdateSpeciesDTO = Partial<CreateSpeciesDTO>;
 export type UpdateCatchDTO = Partial<CreateCatchDTO>;
 export type UpdateTransactionDTO = Partial<CreateTransactionDTO>;
 export type UpdateReportDTO = Partial<CreateReportDTO>;

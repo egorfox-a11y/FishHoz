@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
+import type { CreateFishBatchDTO, UpdateFishBatchDTO } from "../../shared/types.ts";
 import { fishBatchService } from "../services/fishBatchesService.ts";
-import type { CreateFishBatchDTO, UpdateFishBatchDTO } from "../types.ts";
 
 export async function fishBatchRoutes(fastify: FastifyInstance) {
     fastify.get('/fish-batches', {

@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
+import type { CreateFishBatchDTO, FishBatch, UpdateFishBatchDTO } from '../../shared/types.ts';
 import { db } from '../db/index.ts';
 import { fishBatches } from '../db/schema.ts';
-import type { CreateFishBatchDTO, FishBatch, UpdateFishBatchDTO } from '../types.ts';
 export const fishBatchRepository = {
 
     async getById(id: number): Promise<FishBatch | undefined> {

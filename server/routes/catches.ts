@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
+import type { CreateCatchDTO, UpdateCatchDTO } from "../../shared/types.ts";
 import { catchService } from "../services/catchService.ts";
-import type { Catch, CreateCatchDTO, UpdateCatchDTO } from "../types.ts";
 
 export async function catchesRoutes(fastify: FastifyInstance) {
     fastify.get('/catches', {

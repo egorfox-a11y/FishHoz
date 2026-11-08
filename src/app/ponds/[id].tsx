@@ -1,13 +1,13 @@
+import { pondApi } from "@/api/pondApi";
 import { AddFishSheet } from "@/components/AddFishSheet";
 import { Button } from "@/components/Button/button";
 import { Colors, Gaps, Radius } from "@/components/tokens";
-import { fishService } from "@/services/fishService";
-import { pondService } from "@/services/pondService";
-import type { FishBatch, Pond } from "@/types/types";
 import BottomSheet from '@gorhom/bottom-sheet';
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import type { FishBatch, Pond } from "../../../shared/types";
+import { fishApi } from "../../api/fishApi";
 
 export default function PondScreen() {
     const { id } = useLocalSearchParams<{ id: string }>();
@@ -20,7 +20,7 @@ export default function PondScreen() {
     const loadFishBatches = async () => {
     try {
       setError(null);
-      const data = await fishService.getFishBatchByPond(Number(id));
+      const data = await fishApi.getByPondId(Number(id));
       setFishBatch(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ошибка загрузки');
@@ -38,7 +38,7 @@ export default function PondScreen() {
     useEffect(() => {
     const loadPond = async () => {
         try {
-            const data = await pondService.getPondById(Number(id));
+            const data = await pondApi.getById(Number(id));
             setPond(data);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Ошибка загрузки')

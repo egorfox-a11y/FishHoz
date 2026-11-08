@@ -1,5 +1,5 @@
+import type { CreateCatchDTO, UpdateCatchDTO } from "../../shared/types.ts";
 import { catchRepository } from "../repositories/catches.ts";
-import type { CreateCatchDTO, UpdateCatchDTO } from "../types.ts";
 
 export const catchService = {
     async getAllCatches() {

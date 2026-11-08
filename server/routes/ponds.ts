@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
+import type { CreatePondDTO, UpdatePondDTO } from '../../shared/types.ts';
 import { pondService } from '../services/pondService.ts';
-import type { CreatePondDTO, UpdatePondDTO } from '../types.ts';
 
 export async function pondRoutes(fastify: FastifyInstance) {
 

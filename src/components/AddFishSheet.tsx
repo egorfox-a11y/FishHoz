@@ -1,8 +1,9 @@
 import BottomSheet, { BottomSheetBackdrop, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { forwardRef, useCallback, useEffect, useState } from 'react';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
-import { fishService } from '../services/fishService';
-import type { FishSpecies } from '../types/types';
+import type { FishSpecies } from '../../shared/types';
+import { fishApi } from '../api/fishApi';
+import { speciesApi } from '../api/speciesApi';
 import { Button } from './Button/button';
 import { Input } from './input/input';
 import { Colors } from './tokens';
@@ -24,7 +25,7 @@ export const AddFishSheet = forwardRef<BottomSheet, Props>(
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-    fishService.getAllSpecies()
+    speciesApi.getAll()
       .then(setSpeciesList)
       .catch((err) => {
         console.error('Ошибка загрузки видов:', err);
@@ -55,12 +56,12 @@ export const AddFishSheet = forwardRef<BottomSheet, Props>(
 
       setLoading(true);
       try {
-         await fishService.createFishBatch({
+         await fishApi.create({
         pondId,
         speciesId: selectedSpeciesId,
         quantity: Number(quantity),
         avgWeight: weight ? Number(weight) : undefined,
-        launchDate: new Date().toISOString(),
+        launchDate: new Date().toISOString().split('T')[0],
         });
         
         Alert.alert('Успех', 'Рыба добавлена!');
