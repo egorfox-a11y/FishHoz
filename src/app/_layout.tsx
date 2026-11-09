@@ -31,17 +31,10 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
     <BottomSheetModalProvider>
     <Stack>
-      <Stack.Screen 
-      name="index" 
+    <Stack.Screen 
+      name="(tabs)" 
       options={{ 
-        title: 'FishHoz',
-        headerStyle: {
-          backgroundColor: Colors.DarkGreenBack,
-        },
-        headerTintColor: Colors.salatText,
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
+        headerShown: false, 
       }} 
       />
       <Stack.Screen name="login" options={{ title: 'Вход', headerShown: false }} />
@@ -57,6 +50,15 @@ export default function RootLayout() {
         }, 
       }} 
       />
+      <Stack.Screen 
+        name="transactions/add" 
+        options={{ 
+          title: 'Новая транзакция',
+          headerStyle: { backgroundColor: Colors.DarkGreenBack },
+          headerTintColor: Colors.salatText,
+          headerTitleStyle: { fontWeight: 'bold' }, 
+        }} 
+      />
       <Stack.Screen name="ponds/[id]" 
       options={{ title: 'Пруд',
       headerStyle: {
@@ -68,6 +70,24 @@ export default function RootLayout() {
         }, 
       }} 
       />
+      <Stack.Screen 
+        name="reports/add" 
+        options={{ 
+          title: 'Финансовый отчет',
+          headerStyle: { backgroundColor: Colors.DarkGreenBack },
+          headerTintColor: Colors.salatText,
+          headerTitleStyle: { fontWeight: 'bold' }, 
+        }} 
+      />
+      <Stack.Screen 
+      name="transactions/edit" 
+      options={{ 
+        title: 'Редактировать транзакцию',
+        headerStyle: { backgroundColor: Colors.DarkGreenBack },
+        headerTintColor: Colors.salatText,
+        headerTitleStyle: { fontWeight: 'bold' }, 
+      }} 
+    />
     </Stack>
     </BottomSheetModalProvider>
     </GestureHandlerRootView>

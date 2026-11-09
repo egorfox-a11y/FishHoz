@@ -25,7 +25,7 @@ export async function pondRoutes(fastify: FastifyInstance) {
       }
     }
   }, async (request, reply) => {
-    return await pondService.getAllPonds();
+    return await pondService.getAllPonds(request.userId!);
   });
 
   fastify.get('/ponds/:id', {
@@ -37,7 +37,7 @@ export async function pondRoutes(fastify: FastifyInstance) {
   }, async (request, reply) => {
       const { id } = request.params as { id: number };
       try {
-        const pond = await pondService.getPondById(id);
+        const pond = await pondService.getPondById(id, request.userId!);
         return reply.code(200).send(pond);
       } catch (error: any) {
         if (error.message === 'Пруд не найден') {
@@ -65,7 +65,7 @@ export async function pondRoutes(fastify: FastifyInstance) {
     const body = request.body as CreatePondDTO;
 
     try {
-      const newPond = await pondService.createPond(body);
+      const newPond = await pondService.createPond(body, request.userId!);
       return reply.code(201).send(newPond);
     } catch (error: any) {
         return reply.code(400).send({ error: error.message });
@@ -84,7 +84,7 @@ export async function pondRoutes(fastify: FastifyInstance) {
     const { id } = request.params as { id: number };
     const body = request.body as UpdatePondDTO;
       try {
-        const updatedPond = await pondService.updatePond(id, body)
+        const updatedPond = await pondService.updatePond(id, body, request.userId!)
         return reply.code(200).send(updatedPond);
       } catch(error: any) {
         if (error.message === 'Пруд не найден') {
@@ -107,7 +107,7 @@ export async function pondRoutes(fastify: FastifyInstance) {
     const { id } = request.params as { id: number };
 
     try {
-      await pondService.deletePond(id);
+      await pondService.deletePond(id, request.userId!);
       return reply.code(204).send();
     } catch (error: any) {
       if (error.message === 'Пруд не найден') {

@@ -2,6 +2,7 @@ import cors from '@fastify/cors';
 import swagger from '@fastify/swagger';
 import swaggerUi from '@fastify/swagger-ui';
 import Fastify from 'fastify';
+import { authHook } from './auth.ts';
 import { catchesRoutes } from './routes/catches.ts';
 import { feedingRoutes } from './routes/feedings.ts';
 import { fishBatchRoutes } from './routes/fishBatches.ts';
@@ -33,6 +34,9 @@ fastify.register(cors, {
   origin: '*',
 });
 
+// Проверка JWT для всех маршрутов (кроме /health и /documentation).
+// Должна стоять ДО регистрации роутов.
+fastify.addHook('onRequest', authHook);
 
 fastify.register(pondRoutes, { prefix: '/api/v1' });
 

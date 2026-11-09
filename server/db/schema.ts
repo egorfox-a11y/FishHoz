@@ -6,7 +6,8 @@ import {
   pgEnum,
   pgTable,
   text,
-  timestamp
+  timestamp,
+  uuid
 } from 'drizzle-orm/pg-core';
 
 export const transactionTypeEnum = pgEnum('transaction_type', ['income', 'expense']);
@@ -28,6 +29,7 @@ export const ponds = pgTable('ponds', {
   name: text('name').notNull(),
   area: numeric('area', { mode: 'number' }),
   depth: numeric('depth', { mode: 'number' }),
+  ownerId: uuid('owner_id').notNull(),
   createdAt: timestamp('created_at', {mode: 'string'}).defaultNow(),
 });
 

@@ -9,6 +9,7 @@ export type Pond = {
   name: string;
   area: number | null;
   depth: number | null;
+  ownerId: string;
   createdAt: string | null;
 };
 
