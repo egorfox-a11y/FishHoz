@@ -27,7 +27,8 @@ export async function speciesRoutes(fastify: FastifyInstance) {
             }
         }
     }, async (request, reply) => {
-        return await speciesService.getAllSpecies();
+        const userId = request.userId!;
+        return await speciesService.getAllSpecies(userId);
     });
 
     fastify.get('/species/:id', {
@@ -37,14 +38,12 @@ export async function speciesRoutes(fastify: FastifyInstance) {
             params: { type: 'object', properties: { id: { type: 'number' } } }
         }
     }, async (request, reply) => {
-        const { id } = request.params as { id: number };
+        const body = request.body as CreateSpeciesDTO;
+        const userId = request.userId!;
         try {
-            const species = await speciesService.getSpeciesById(id);
-            return reply.code(200).send(species);
+            const newSpecies = await speciesService.createSpecies(body, userId);
+            return reply.code(201).send(newSpecies);
         } catch (error: any) {
-            if (error.message === 'Вид рыбы не найден') {
-                return reply.code(404).send({ error: error.message });
-            }
             return reply.code(400).send({ error: error.message });
         }
     });
@@ -69,14 +68,14 @@ export async function speciesRoutes(fastify: FastifyInstance) {
         }
     }, async (request, reply) => {
         const body = request.body as CreateSpeciesDTO;
+        const userId = request.userId!;
         try {
-            const newSpecies = await speciesService.createSpecies(body);
+            const newSpecies = await speciesService.createSpecies(body, userId);
             return reply.code(201).send(newSpecies);
         } catch (error: any) {
             return reply.code(400).send({ error: error.message });
         }
     });
-
     fastify.patch('/species/:id', {
         schema: {
             tags: ['Species'],
@@ -99,15 +98,15 @@ export async function speciesRoutes(fastify: FastifyInstance) {
     }, async (request, reply) => {
         const { id } = request.params as { id: number };
         const body = request.body as UpdateSpeciesDTO;
-
+        const userId = request.userId!;
         try {
-            const updated = await speciesService.updateSpecies(id, body);
+            const updated = await speciesService.updateSpecies(id, body, userId);
             return reply.code(200).send(updated);
         } catch (error: any) {
             if (error.message === 'Вид рыбы не найден') {
                 return reply.code(404).send({ error: error.message });
             }
-            return reply.code(400).send({ error: error.message })
+            return reply.code(400).send({ error: error.message });
         }
     });
 
@@ -119,14 +118,15 @@ export async function speciesRoutes(fastify: FastifyInstance) {
         }
     }, async (request, reply) => {
         const { id } = request.params as { id: number };
+        const userId = request.userId!;
         try {
-            await speciesService.deleteSpecies(id);
+            await speciesService.deleteSpecies(id, userId);
             return reply.code(204).send();
         } catch (error: any) {
             if (error.message === 'Вид рыбы не найден') {
                 return reply.code(404).send({ error: error.message });
             }
-            return reply.code(400).send({ error: error.message })
+            return reply.code(400).send({ error: error.message });
         }
     });
 }

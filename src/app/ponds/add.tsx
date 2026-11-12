@@ -51,7 +51,7 @@ export default function AddPondScreen() {
         return (
             <View style={styles.container}>
                 <View style={styles.content}>
-                    <Text style={styles.header}>Введите данные пруда</Text>
+                    <Text style={styles.header}>Новый пруд</Text>
 
                         <View style={styles.form}>
                             <Input 

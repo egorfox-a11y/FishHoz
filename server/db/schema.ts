@@ -2,6 +2,7 @@ import {
   bigint,
   date,
   integer,
+  jsonb,
   numeric,
   pgEnum,
   pgTable,
@@ -22,6 +23,7 @@ export const fishSpecies = pgTable('fish_species', {
     feedRate: numeric('feed_rate', { mode: 'number' }),
     growthRate: numeric('growth_rate', { mode: 'number' }),
     maturityMonths: integer('maturity_months'),
+    ownerId: uuid('owner_id').notNull(),
 });
 
 export const ponds = pgTable('ponds', {
@@ -74,6 +76,7 @@ export const transactions = pgTable('transactions', {
     .references(() => catches.id, { onDelete: 'set null' }),
   type: transactionTypeEnum('type').notNull(),
   category: text('category').notNull(),
+  ownerId: uuid('owner_id').notNull(),
   amount: numeric('amount', { mode: 'number' }).notNull(),
   transactionDate: date('transaction_date').notNull(),
   comment: text('comment'),
@@ -81,9 +84,12 @@ export const transactions = pgTable('transactions', {
 
 export const reports = pgTable('reports', {
   id: bigint('id', { mode: 'number' }).primaryKey().generatedAlwaysAsIdentity(),
-  pondId: bigint('pond_id', { mode: 'number' })
-    .references(() => ponds.id, { onDelete: 'set null' }),
+  ownerId: uuid('owner_id').notNull(),
   period: text('period').notNull(),
-  type: text('type').notNull(),
+  totalIncome: numeric('total_income', { mode: 'number' }).notNull(),
+  totalExpense: numeric('total_expense', { mode: 'number' }).notNull(),
+  balance: numeric('balance', { mode: 'number' }).notNull(),
+  data: jsonb('data').notNull(), // Сюда сохраняем массив транзакций
   createdAt: timestamp('created_at', { mode: 'string' }).defaultNow(),
 });
+

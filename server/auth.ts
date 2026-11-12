@@ -47,6 +47,7 @@ export async function authHook(request: FastifyRequest, reply: FastifyReply) {
   }
 
   request.userId = data.user.id;
+  console.log('AUTH HOOK: userId установлен:', request.userId);
 }
 
 declare module 'fastify' {

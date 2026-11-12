@@ -10,6 +10,7 @@ import { pondRoutes } from './routes/ponds.ts';
 import { reportsRoutes } from './routes/reports.ts';
 import { speciesRoutes } from './routes/species.ts';
 import { transactionRoutes } from './routes/transactions.ts';
+import { supabaseAdmin } from './supabaseAdmin.ts';
 
 const fastify = Fastify({ logger: true });
 
@@ -34,9 +35,28 @@ fastify.register(cors, {
   origin: '*',
 });
 
-// Проверка JWT для всех маршрутов (кроме /health и /documentation).
-// Должна стоять ДО регистрации роутов.
 fastify.addHook('onRequest', authHook);
+
+fastify.delete('/api/v1/auth/delete-account', async (request, reply) => {
+  try {
+    const userId = request.userId;
+    
+    if (!userId) {
+      return reply.code(401).send({ error: 'Неавторизован' });
+    }
+
+    const { error } = await supabaseAdmin.auth.admin.deleteUser(userId);
+
+    if (error) {
+      return reply.code(400).send({ error: error.message });
+    }
+
+    return reply.code(204).send(); 
+  } catch (err) {
+    console.error('Ошибка удаления аккаунта:', err);
+    return reply.code(500).send({ error: 'Не удалось удалить аккаунт' });
+  }
+});
 
 fastify.register(pondRoutes, { prefix: '/api/v1' });
 

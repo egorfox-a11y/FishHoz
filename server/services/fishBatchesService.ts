@@ -20,7 +20,7 @@ export const fishBatchService = {
             throw new Error('Количество должно быть больше нуля');
         }
 
-        if (data.avgWeight !== undefined && data.avgWeight <= 0) {
+        if (data.avgWeight != null && data.avgWeight <= 0) {
             throw new Error('Средний вес должен быть больше нуля');
         }
         return await fishBatchRepository.create(data);
@@ -35,7 +35,7 @@ export const fishBatchService = {
             throw new Error('Количество должно быть больше нуля');
         }
 
-        if (data.avgWeight !== undefined && data.avgWeight <= 0) {
+        if (data.avgWeight != null && data.avgWeight <= 0) {
             throw new Error('Средний вес должен быть больше нуля');
         }
         return await fishBatchRepository.update(id, data);

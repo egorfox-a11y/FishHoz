@@ -1,5 +1,6 @@
 import { auth } from '@/api/auth';
 import { transactionApi } from '@/api/transactionApi';
+import { Button } from '@/components/Button/button';
 import { DeleteButton } from '@/components/Button/deleteButton';
 import { Colors, Radius } from '@/components/tokens';
 import { router, useFocusEffect } from 'expo-router';
@@ -46,6 +47,29 @@ export default function ProfileScreen() {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    Alert.alert(
+      'Удаление аккаунта',
+      'Вы уверены? Все ваши данные будут потеряны навсегда.',
+      [
+        { text: 'Отмена', style: 'cancel' },
+        {
+          text: 'Удалить',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await auth.deleteAccount(); 
+              await auth.logout(); 
+              router.replace('/login');
+            } catch (e) {
+              Alert.alert('Ошибка', e instanceof Error ? e.message : 'Не удалось удалить');
+            }
+          }
+        }
+      ]
+    );
+  };
+
   if (loading) {
     return (
       <View style={styles.center}>
@@ -69,12 +93,22 @@ export default function ProfileScreen() {
           {balance} ₽
         </Text>
       </View>
-
-      <DeleteButton 
+        <Button 
+          text="Справочник видов рыбы" 
+          onPress={() => router.push('/species')} 
+          style={{ marginBottom: 20 }} 
+        />
+        <DeleteButton 
         text="Выйти из аккаунта" 
         onPress={handleLogout} 
-        style={styles.logoutButton}
+        style={{ marginTop: 20 }}
       />
+      <DeleteButton 
+        text="Удалить аккаунт" 
+        onPress={handleDeleteAccount} 
+        style={{ marginTop: 20 }}
+      />
+      
     </View>
   );
 }

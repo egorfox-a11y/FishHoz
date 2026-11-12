@@ -2,19 +2,20 @@ import type { CreateTransactionDTO, UpdateTransactionDTO } from "../../shared/ty
 import { transactionRepository } from "../repositories/transactions.ts";
 
 export const transactionService = {
-    async getAllTransactions() {
-        return await transactionRepository.getAll();
+    async getAllTransactions(ownerId: string) {
+        console.log('SERVICE: ownerId =', ownerId);
+        return await transactionRepository.getAll(ownerId);
     },
 
-    async getTransactionById(id: number) {
-        const transaction = await transactionRepository.getById(id);
+    async getTransactionById(id: number, ownerId: string) {
+        const transaction = await transactionRepository.getById(id, ownerId);
         if (!transaction) {
             throw new Error('Транзакция не найдена');
         }
         return transaction;
     },
 
-    async createTransaction(data: CreateTransactionDTO) {
+    async createTransaction(data: CreateTransactionDTO, ownerId: string) {
         if (!data.category || data.category.trim() == '') {
             throw new Error('Категория не может быть пустой');
         }
@@ -24,11 +25,11 @@ export const transactionService = {
         if (!data.transactionDate || data.transactionDate.trim() == '') {
             throw new Error('Дата не может быть пустой')
         }
-        return await transactionRepository.create(data);
+        return await transactionRepository.create(data, ownerId);
     },
 
-    async updateTransaction(id: number, data: UpdateTransactionDTO) {
-        const transaction = await transactionRepository.getById(id);
+    async updateTransaction(id: number, data: UpdateTransactionDTO, ownerId: string) {
+        const transaction = await transactionRepository.getById(id, ownerId);
         if (!transaction) {
             throw new Error('Транзакция не найдена');
         }
@@ -44,8 +45,8 @@ export const transactionService = {
         return await transactionRepository.update(id, data)
     },
 
-    async deleteTransaction(id: number) {
-        const transaction = await transactionRepository.getById(id);
+    async deleteTransaction(id: number, ownerId: string) {
+        const transaction = await transactionRepository.getById(id, ownerId);
         if (!transaction) {
             throw new Error('Транзакция не найдна');
         }

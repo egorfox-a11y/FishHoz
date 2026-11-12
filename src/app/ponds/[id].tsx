@@ -13,7 +13,7 @@ import { ItemActionsSheet } from "@/components/ItemActionSheet";
 import { Colors, Gaps, Radius } from "@/components/tokens";
 import BottomSheet from '@gorhom/bottom-sheet';
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import Animated, { FadeIn, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import type { Catch, Feeding, FishBatch, Pond } from "../../../shared/types";
@@ -120,19 +120,21 @@ export default function PondScreen() {
         }, [])
       );
 
-    useEffect(() => {
-    const loadPond = async () => {
-        try {
-            const data = await pondApi.getById(Number(id));
-            setPond(data);
-        } catch (err) {
-            setError(err instanceof Error ? err.message : 'Ошибка загрузки')
-        } finally {
-            setLoading(false);
-        }
-    };
-    loadPond();
-    }, [id]);
+        useFocusEffect(
+        useCallback(() => {
+            const loadPond = async () => {
+                try {
+                    const data = await pondApi.getById(Number(id));
+                    setPond(data);
+                } catch (err) {
+                    setError(err instanceof Error ? err.message : 'Ошибка загрузки')
+                } finally {
+                    setLoading(false);
+                }
+            };
+            loadPond();
+        }, [id])
+    );
 
     if (loading) {
     return (
@@ -212,6 +214,22 @@ export default function PondScreen() {
                     ListFooterComponent={
                       <>
                         <Button text="Добавить поголовье" style={styles.addButton} onPress={() => bottomSheetRef.current?.expand()} />
+                          <Button 
+                          onPress={() => {
+                          router.push({
+                            pathname: '/ponds/edit',
+                            params: {
+                              id: pond.id,
+                              name: pond.name,
+                              area: pond.area,
+                              depth: pond.depth,
+                            }
+                          })
+                        }}
+                          style={({ pressed }) => 
+                            [ styles.button, pressed && styles.pressedButton]}
+                          text='Изменить пруд' 
+                          />
                         <DeleteButton text="Удалить пруд" onPress={() => {
                             Alert.alert('Подтвердите удаление', 'Вы точно хотите удалить пруд?', [
                                 { text: 'Отменить', style: 'cancel' },
@@ -247,6 +265,22 @@ export default function PondScreen() {
                     ListFooterComponent={
                       <>
                         <Button text="Добавить вылов" style={styles.addButton} onPress={() => catchSheetRef.current?.expand()} />
+                          <Button 
+                          onPress={() => {
+                          router.push({
+                            pathname: '/ponds/edit',
+                            params: {
+                              id: pond.id,
+                              name: pond.name,
+                              area: pond.area,
+                              depth: pond.depth,
+                            }
+                          })
+                        }}
+                          style={({ pressed }) => 
+                            [ styles.button, pressed && styles.pressedButton]}
+                          text='Изменить пруд' 
+                          />
                         <DeleteButton text="Удалить пруд" onPress={() => {
                             Alert.alert('Подтвердите удаление', 'Вы точно хотите удалить пруд?', [
                                 { text: 'Отменить', style: 'cancel' },
@@ -281,6 +315,22 @@ export default function PondScreen() {
                     ListFooterComponent={
                       <>
                         <Button text="Добавить кормление" style={styles.addButton} onPress={() => feedingSheetRef.current?.expand()} />
+                          <Button 
+                          onPress={() => {
+                          router.push({
+                            pathname: '/ponds/edit',
+                            params: {
+                              id: pond.id,
+                              name: pond.name,
+                              area: pond.area,
+                              depth: pond.depth,
+                            }
+                          })
+                        }}
+                          style={({ pressed }) => 
+                            [ styles.button, pressed && styles.pressedButton]}
+                          text='Изменить пруд' 
+                          />
                         <DeleteButton text="Удалить пруд" onPress={() => {
                             Alert.alert('Подтвердите удаление', 'Вы точно хотите удалить пруд?', [
                                 { text: 'Отменить', style: 'cancel' },

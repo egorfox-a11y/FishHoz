@@ -21,7 +21,7 @@ export default function LoginScreen() {
 
         try {
             await auth.login(email, password);
-            router.replace('/');
+            router.replace('/ponds');
         } catch (error) {
             Alert.alert('Ошибка входа', error instanceof Error ? error.message : 
                 'Что- то пошло не так');

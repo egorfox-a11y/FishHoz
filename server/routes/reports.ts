@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import type { CreateReportDTO, UpdateReportDTO } from "../../shared/types.ts";
+import type { CreateReportDTO } from "../../shared/types.ts";
 import { reportService } from "../services/reportService.ts";
 
 export async function reportsRoutes(fastify: FastifyInstance) {
@@ -14,16 +14,19 @@ export async function reportsRoutes(fastify: FastifyInstance) {
                         type: 'object',
                         properties: {
                             id: { type: 'number' },
-                            pondId: { type: 'number', nullable: true },
                             period: { type: 'string' },
-                            type: { type: 'string' },
+                            totalIncome: { type: 'number' },
+                            totalExpense: { type: 'number' },
+                            balance: { type: 'number' },
+                            createdAt: { type: 'string' },
                         }
                     }
                 }
             }
         }
     }, async (request, reply) => {
-        return await reportService.getAllReports();
+        const userId = request.userId!;
+        return await reportService.getAllReports(userId);
     });
 
     fastify.get('/reports/:id', {
@@ -34,8 +37,9 @@ export async function reportsRoutes(fastify: FastifyInstance) {
         }
     }, async (request, reply) => {
         const { id } = request.params as { id: number };
+        const userId = request.userId!;
         try {
-            const report = await reportService.getReportById(id);
+            const report = await reportService.getReportById(id, userId);
             return reply.code(200).send(report);
         } catch (error: any) {
             if (error.message === 'Отчёт не найден') {
@@ -51,50 +55,24 @@ export async function reportsRoutes(fastify: FastifyInstance) {
             description: 'Создание отчёта',
             body: {
                 type: 'object',
-                required: ['period', 'type'],
+                required: ['period', 'totalIncome', 'totalExpense', 'balance', 'data'],
                 properties: {
-                    pondId: { type: 'number', description: 'ID пруда' },
                     period: { type: 'string', description: 'Период' },
-                    type: { type: 'string', description: 'Тип отчёта' },
+                    totalIncome: { type: 'number', description: 'Сумма доходов' },
+                    totalExpense: { type: 'number', description: 'Сумма расходов' },
+                    balance: { type: 'number', description: 'Баланс' },
+                    data: { type: 'array', description: 'Данные транзакций' }, // JSON
                 }
             }
         }
     }, async (request, reply) => {
         const body = request.body as CreateReportDTO;
+        const userId = request.userId!;
         try {
-            const newReport = await reportService.createReport(body);
+            const newReport = await reportService.createReport(body, userId);
             return reply.code(201).send(newReport);
         } catch (error: any) {
             return reply.code(400).send({ error: error.message });
-        }
-    });
-
-    fastify.patch('/reports/:id', {
-        schema: {
-            tags: ['Reports'],
-            description: 'Обновление данных отчёта',
-            params: { type: 'object', properties: { id: { type: 'number' } } },
-            body: {
-                type: 'object',
-                 properties: {
-                    pondId: { type: 'number' },
-                    period: { type: 'string' },
-                    type: { type: 'string' },  
-                }
-            }
-        }
-    }, async (request, reply) => {
-        const { id } = request.params as { id: number };
-        const body = request.body as UpdateReportDTO;
-
-        try {
-            const updated = await reportService.updateReport(id, body);
-            return reply.code(200).send(updated);
-        } catch (error: any) {
-            if (error.message === 'Отчёт не найден') {
-                return reply.code(404).send({ error: error.message });
-            }
-            return reply.code(400).send({ error: error.message })
         }
     });
 
@@ -106,8 +84,9 @@ export async function reportsRoutes(fastify: FastifyInstance) {
         }
     }, async (request, reply) => {
         const { id } = request.params as { id: number };
+        const userId = request.userId!;
         try {
-            await reportService.deleteReport(id);
+            await reportService.deleteReport(id, userId);
             return reply.code(204).send();
         } catch (error: any) {
             if (error.message === 'Отчёт не найден') {

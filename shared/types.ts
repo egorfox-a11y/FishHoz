@@ -64,42 +64,45 @@ export type Transaction = {
 
 export type Report = {
   id: number;
-  pondId: number | null;
+  ownerId: string;
   period: string;
-  type: string;
+  totalIncome: number;
+  totalExpense: number;
+  balance: number;
+  data: any;
   createdAt: string | null;
 };
 
 export type CreatePondDTO = {
   name: string;
-  area?: number;
-  depth?: number;
+  area?: number | null;
+  depth?: number | null;
   ownerId?: string;
 };
 
 export type CreateFishBatchDTO = {
   pondId: number;
-  speciesId?: number;
+  speciesId?: number | null;
   quantity: number;
-  avgWeight?: number;
+  avgWeight?: number | null;
   launchDate: string;
   ownerId?: string;
 };
 
 export type CreateSpeciesDTO = {
   name: string;
-  description?: string;
-  optimalTempMin?: number;
-  optimalTempMax?: number;
-  feedRate?: number;
-  growthRate?: number;
-  maturityMonths?: number;
+  description?: string | null; 
+  optimalTempMin?: number | null;
+  optimalTempMax?: number | null;
+  feedRate?: number | null; 
+  growthRate?: number | null; 
+  maturityMonths?: number | null; 
 };
 
 export type CreateFeedingDTO = {
   pondId: number;
   amount: number;
-  feedType?: string;
+  feedType?: string | null;
   ownerId?: string;
 };
 
@@ -107,25 +110,27 @@ export type CreateCatchDTO = {
   pondId: number;
   speciesId: number;
   quantity: number;
-  totalWeight?: number;
-  purpose?: string;
+  totalWeight?: number | null;
+  purpose?: string | null;
   ownerId?: string;
 };
 
 export type CreateTransactionDTO = {
-  catchId?: number;
+  catchId?: number | null;
   type: 'income' | 'expense';
   category: string;
   amount: number;
   transactionDate: string;
-  comment?: string;
+  comment?: string | null;
   ownerId?: string;
 };
 
 export type CreateReportDTO = {
-  pondId?: number;
   period: string;
-  type: string;
+  totalIncome: number;
+  totalExpense: number;
+  balance: number;
+  data: any;
   ownerId?: string;
 };
 

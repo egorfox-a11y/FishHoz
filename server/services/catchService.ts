@@ -19,7 +19,7 @@ export const catchService = {
             throw new Error('Количество должно быть больше нуля');
         }
 
-        if (data.totalWeight !==undefined && data.totalWeight <= 0) {
+        if (data.totalWeight != null && data.totalWeight <= 0) {
             throw new Error('Общий вес должен быть больше нуля');
         }
 
@@ -37,7 +37,7 @@ export const catchService = {
             throw new Error('Количество должно быть больше нуля');
         }
 
-        if (data.totalWeight !==undefined && data.totalWeight <= 0) {
+        if (data.totalWeight != null && data.totalWeight <= 0) {
             throw new Error('Общий вес должен быть больше нуля');
         }
 

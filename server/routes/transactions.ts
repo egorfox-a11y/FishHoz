@@ -29,7 +29,9 @@ export async function transactionRoutes(fastify: FastifyInstance) {
             }
         }
     }, async (request, reply) => {
-        return await transactionService.getAllTransactions();
+        console.log('ROUTE: userId =', request.userId);
+        const userId = request.userId!; 
+        return await transactionService.getAllTransactions(userId);
     });
 
     fastify.get('/transactions/:id', {
@@ -39,9 +41,10 @@ export async function transactionRoutes(fastify: FastifyInstance) {
             params: { type: 'object', properties: { id: { type: 'number' } } }
         }
     }, async (request, reply) => {
+        const userId = request.userId!;
         const { id } = request.params as { id: number };
         try {
-            const transaction = await transactionService.getTransactionById(id);
+            const transaction = await transactionService.getTransactionById(id, userId);
             return reply.code(200).send(transaction);
         } catch (error: any) {
             if (error.message === 'Транзакция не найдена') {
@@ -74,8 +77,9 @@ export async function transactionRoutes(fastify: FastifyInstance) {
         }
     }, async (request, reply) => {
         const body = request.body as CreateTransactionDTO;
+        const userId = request.userId!;
         try {
-            const newTransaction = await transactionService.createTransaction(body);
+            const newTransaction = await transactionService.createTransaction(body, userId);
             return reply.code(201).send(newTransaction);
         } catch (error: any) {
             return reply.code(400).send({ error: error.message });
@@ -105,9 +109,9 @@ export async function transactionRoutes(fastify: FastifyInstance) {
     }, async (request, reply) => {
         const { id } = request.params as { id: number };
         const body = request.body as UpdateTransactionDTO;
-
+        const userId = request.userId!;
         try {
-            const updated = await transactionService.updateTransaction(id, body);
+            const updated = await transactionService.updateTransaction(id, body, userId);
             return reply.code(200).send(updated);
         } catch (error: any) {
             if (error.message === 'Транзакция не найдена') {
@@ -125,8 +129,9 @@ export async function transactionRoutes(fastify: FastifyInstance) {
         }
     }, async (request, reply) => {
         const { id } = request.params as { id: number };
+        const userId = request.userId!;
         try {
-            await transactionService.deleteTransaction(id);
+            await transactionService.deleteTransaction(id, userId);
             return reply.code(204).send();
         } catch (error: any) {
             if (error.message === 'Транзакция не найдена') {

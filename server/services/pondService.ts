@@ -22,6 +22,10 @@ export const pondService = {
         if (!data.name || data.name.trim() === '') {
             throw new Error('Имя пруда не может быть пустым');
         }
+        const existingPonds = await pondRepository.getAll(ownerId);
+        if (existingPonds.some(p => p.name.toLowerCase() === data.name.toLowerCase())) {
+            throw new Error('У вас уже есть пруд с таким названием');
+        }
         return await pondRepository.create(data, ownerId);
     },
 
@@ -29,6 +33,15 @@ export const pondService = {
         await getOwnedPond(id, ownerId);
         if (data.name !== undefined && data.name.trim() === '') {
             throw new Error('Имя пруда не может быть пустым');
+        }
+         if (data.name) {
+            const allPonds = await pondRepository.getAll(ownerId);
+            const isDuplicate = allPonds.some(
+                p => p.id !== id && p.name.toLowerCase() === data.name!.toLowerCase()
+            );
+            if (isDuplicate) {
+                throw new Error('У вас уже есть пруд с таким названием');
+            }
         }
         return await pondRepository.update(id, data);
     },

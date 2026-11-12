@@ -88,6 +88,31 @@ export default function RootLayout() {
         headerTitleStyle: { fontWeight: 'bold' }, 
       }} 
     />
+    <Stack.Screen name="species/index" 
+    options={{ title: 'Виды рыбы', 
+      headerStyle: { backgroundColor: Colors.DarkGreenBack }, 
+      headerTintColor: Colors.salatText }} />
+    <Stack.Screen name="species/add" 
+    options={{ title: 'Добавить вид', 
+      headerStyle: { backgroundColor: Colors.DarkGreenBack }, 
+      headerTintColor: Colors.salatText }} />
+    <Stack.Screen name="species/edit" 
+    options={{ title: 'Редактировать вид', 
+      headerStyle: { backgroundColor: Colors.DarkGreenBack }, 
+      headerTintColor: Colors.salatText }} />
+      <Stack.Screen name="ponds/edit" 
+    options={{ title: 'Редактировать пруд', 
+      headerStyle: { backgroundColor: Colors.DarkGreenBack }, 
+      headerTintColor: Colors.salatText }} />
+      <Stack.Screen 
+        name="reports/index" 
+        options={{ 
+          title: 'Отчеты',
+          headerStyle: { backgroundColor: Colors.DarkGreenBack },
+          headerTintColor: Colors.salatText,
+          headerTitleStyle: { fontWeight: 'bold' }, 
+        }} 
+      />
     </Stack>
     </BottomSheetModalProvider>
     </GestureHandlerRootView>

@@ -11,7 +11,6 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
       headers['Content-Type'] = 'application/json';
     }
 
-    // JWT-токен, который Supabase выдал при входе
     const { data } = await supabase.auth.getSession();
     const token = data.session?.access_token;
     if (token) {

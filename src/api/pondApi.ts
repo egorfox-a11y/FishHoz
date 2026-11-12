@@ -1,4 +1,4 @@
-import { CreatePondDTO, Pond } from '../../shared/types';
+import { CreatePondDTO, Pond, UpdatePondDTO } from '../../shared/types';
 import { httpClient } from './httpClient';
 
 export const pondApi = {
@@ -8,7 +8,7 @@ export const pondApi = {
 
   create: (data: CreatePondDTO) => httpClient.post<Pond>('/ponds', data),
 
-  update: (id: number, data: { name?: string; area?: number; depth?: number }) => 
+  update: (id: number, data: UpdatePondDTO) => 
     httpClient.patch<Pond>(`/ponds/${id}`, data),
     
   delete: (id: number) => httpClient.delete<void>(`/ponds/${id}`),

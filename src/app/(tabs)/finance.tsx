@@ -147,9 +147,9 @@ export default function FinanceScreen() {
           style={styles.button}
         />
         <Button 
-          text="Сформировать отчет" 
-          onPress={() => router.push('/reports/add')} 
-          style={styles.button}
+          text="Отчеты" 
+          onPress={() => router.push('/reports')} 
+          style={[styles.button, { backgroundColor: Colors.GreenPlaceHolder }]}
         />
       </View>
       <ItemActionsSheet
