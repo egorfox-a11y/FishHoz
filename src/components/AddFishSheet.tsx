@@ -14,7 +14,6 @@ type Props = {
   onSuccess: () => void; 
 };
 
-
 export const AddFishSheet = forwardRef<BottomSheet, Props>(
   ({ pondId, onClose, onSuccess }, ref) => {
 
@@ -25,14 +24,13 @@ export const AddFishSheet = forwardRef<BottomSheet, Props>(
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-    speciesApi.getAll()
-      .then(setSpeciesList)
-      .catch((err) => {
-        console.error('Ошибка загрузки видов:', err);
-        Alert.alert('Ошибка', 'Не удалось загрузить список видов рыб');
-      });
-  }, []);
-
+      speciesApi.getAll()
+        .then(setSpeciesList)
+        .catch((err) => {
+          console.error('Ошибка загрузки видов:', err);
+          Alert.alert('Ошибка', 'Не удалось загрузить список видов рыб');
+        });
+    }, []);
 
     const snapPoints = ['100%'];
 
@@ -57,11 +55,11 @@ export const AddFishSheet = forwardRef<BottomSheet, Props>(
       setLoading(true);
       try {
          await fishApi.create({
-        pondId,
-        speciesId: selectedSpeciesId,
-        quantity: Number(quantity),
-        avgWeight: weight ? Number(weight) : undefined,
-        launchDate: new Date().toISOString().split('T')[0],
+          pondId,
+          speciesId: selectedSpeciesId,
+          quantity: Number(quantity),
+          avgWeight: weight ? Number(weight) : undefined,
+          launchDate: new Date().toISOString().split('T')[0],
         });
         
         Alert.alert('Успех', 'Рыба добавлена!');
@@ -88,12 +86,17 @@ export const AddFishSheet = forwardRef<BottomSheet, Props>(
         backgroundStyle={{ backgroundColor: Colors.DarkGreenBack }}
         handleIndicatorStyle={{ backgroundColor: Colors.GreenPlaceHolder }}
       >
-
         <BottomSheetScrollView contentContainerStyle={styles.content}>
           <Text style={styles.title}>Добавить рыбу</Text>
 
           <Text style={styles.label}>Выберите вид рыбы:</Text>
-          <View style={styles.speciesList}>
+          
+          {speciesList.length === 0 ? (
+            <Text style={styles.warning}>
+              Видов рыбы нет. Создайте их в профиле (Справочник видов).
+            </Text>
+          ) : (
+            <View style={styles.speciesList}>
               {speciesList.map((item) => (
                 <Pressable
                   key={item.id}
@@ -102,11 +105,13 @@ export const AddFishSheet = forwardRef<BottomSheet, Props>(
                     selectedSpeciesId === item.id && styles.speciesItemSelected,
                   ]}
                   onPress={() => setSelectedSpeciesId(item.id)}  
-                  >
-                    <Text style={styles.speciesText}>{item.name}</Text>
-                  </Pressable>
-                ))}
-              </View>
+                >
+                  <Text style={styles.speciesText}>{item.name}</Text>
+                </Pressable>
+              ))}
+            </View>
+          )}
+
           <Input
             placeholder="Количество (шт.)"
             value={quantity}
@@ -143,9 +148,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   label: {
-  color: Colors.salatText,
-  fontSize: 16,
-  marginBottom: 5,
+    color: Colors.salatText,
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  warning: {
+    color: '#ff4444', 
+    fontSize: 14,
+    marginBottom: 15,
+    fontStyle: 'italic',
   },
   speciesList: {
     flexDirection: 'row',

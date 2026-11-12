@@ -78,15 +78,26 @@ export const AddCatchSheet = forwardRef<BottomSheet, Props>(
 
           <Text style={styles.label}>Выберите вид рыбы:</Text>
           <View style={styles.speciesList}>
-            {speciesList.map((item) => (
-              <Pressable
-                key={item.id}
-                style={[styles.speciesItem, selectedSpeciesId === item.id && styles.speciesItemSelected]}
-                onPress={() => setSelectedSpeciesId(item.id)}  
-              >
-                <Text style={styles.speciesText}>{item.name}</Text>
-              </Pressable>
-            ))}
+            {speciesList.length === 0 ? (
+                        <Text style={styles.warning}>
+                          Видов рыбы нет. Создайте их в профиле (Справочник видов).
+                        </Text>
+                      ) : (
+                        <View style={styles.speciesList}>
+                          {speciesList.map((item) => (
+                            <Pressable
+                              key={item.id}
+                              style={[
+                                styles.speciesItem,
+                                selectedSpeciesId === item.id && styles.speciesItemSelected,
+                              ]}
+                              onPress={() => setSelectedSpeciesId(item.id)}  
+                            >
+                              <Text style={styles.speciesText}>{item.name}</Text>
+                            </Pressable>
+                          ))}
+                        </View>
+                      )}
           </View>
 
           <Input placeholder="Количество (шт.)" value={quantity} onChangeText={setQuantity} keyboardType="numeric" />
@@ -108,4 +119,5 @@ const styles = StyleSheet.create({
   speciesItem: { padding: 10, borderRadius: 8, backgroundColor: Colors.GreenInput, borderWidth: 1, borderColor: 'transparent' },
   speciesItemSelected: { borderColor: Colors.salatText },
   speciesText: { color: Colors.salatText },
+  warning: { color: '#ff4444', fontSize: 14, marginBottom: 15, fontStyle: 'italic' }
 });
